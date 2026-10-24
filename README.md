@@ -1,59 +1,199 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Sembark URL Shortener
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+A multi-company URL shortener application built with **Laravel 12, PHP, and MySQL/SQLite**. The application supports role-based access control, company-level data isolation, invitation-based onboarding, and public short URL redirection.
 
-## About Laravel
+## Features
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+- **Authentication:** Secure login and logout.
+- **Multi-company support:** Each company has its own users and short URLs.
+- **Role-based access control:** SuperAdmin, Admin, and Member roles.
+- **Invitation system:** Invite users to join a company.
+- **Short URL creation:** Admins and Members can create short URLs.
+- **Access restrictions:** SuperAdmins cannot create short URLs.
+- **Company-level visibility:** Admins can view URLs belonging to their company.
+- **User-level visibility:** Members can view only the URLs they created.
+- **Global visibility:** SuperAdmins can view short URLs across all companies.
+- **Public redirection:** Short URLs redirect visitors to their original URLs.
+- **Automated tests:** Feature tests cover URL creation, access permissions, data visibility, and redirection.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Technology Stack
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+- PHP 8.2+
+- Laravel 12
+- MySQL or SQLite
+- Blade templates
+- Laravel Eloquent ORM
+- PHPUnit / Laravel testing tools
 
-## Learning Laravel
+## Requirements
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+Before installation, make sure you have:
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+- PHP 8.2 or a compatible newer version
+- Composer
+- MySQL or SQLite
+- Node.js and npm, if you need to build frontend assets
 
-## Laravel Sponsors
+## Installation
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+### 1. Clone the repository
 
-### Premium Partners
+```bash
+git clone https://github.com/guptashubhu/sembark-url-shortener.git
+cd sembark-url-shortener
+```
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+### 2. Install PHP dependencies
 
-## Contributing
+```bash
+composer install
+```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+### 3. Configure the environment
 
-## Code of Conduct
+Create your local environment file.
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+On Windows:
 
-## Security Vulnerabilities
+```powershell
+Copy-Item .env.example .env
+```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+Generate the application key:
+
+```bash
+php artisan key:generate
+```
+
+### 4. Configure the database
+
+For MySQL, update the database settings in `.env`:
+
+```env
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=sembark_url_shortener
+DB_USERNAME=root
+DB_PASSWORD=
+```
+
+Create the `sembark_url_shortener` database in MySQL before running migrations. Update the username and password according to your local setup.
+
+Alternatively, configure SQLite in `.env` and ensure the SQLite database file exists.
+
+### 5. Run migrations and seed the database
+
+```bash
+php artisan migrate --seed
+```
+
+This creates the required database tables and seeds the SuperAdmin account.
+
+**Important:** Use the SuperAdmin credentials configured in the seeder for local development. Change the default password before using the application in any shared or production environment. Never commit real credentials or secrets to GitHub.
+
+### 6. Install frontend dependencies
+
+If required by the frontend setup:
+
+```bash
+npm install
+npm run build
+```
+
+### 7. Start the application
+
+```bash
+php artisan serve
+```
+
+Open the local URL displayed in your terminal, usually:
+
+`http://127.0.0.1:8000`
+
+## User Roles and Permissions
+
+| Feature | SuperAdmin | Admin | Member |
+|---|---|---|---|
+| View short URLs across all companies | Yes | No | No |
+| View URLs from own company | All companies | Yes | Own URLs only |
+| Create short URLs | No | Yes | Yes |
+| Invite an Admin | Yes | Yes, within own company | No |
+| Invite a Member | No | Yes, within own company | No |
+
+SuperAdmin can invite an Admin while creating a company. Admins can invite Admins or Members into their own company.
+
+Invitations are accepted through an invitation link. In the current development flow, the generated link is displayed by the application; automatic email delivery is not claimed as an implemented feature.
+
+## Running Tests
+
+Run all automated tests:
+
+```bash
+php artisan test
+```
+
+To run the short URL feature tests:
+
+```bash
+php artisan test --filter=ShortUrlTest
+```
+
+The ShortUrlTest suite currently contains seven passing tests covering:
+
+- Admin can create a short URL.
+- Member can create a short URL.
+- SuperAdmin cannot create a short URL.
+- Admin sees URLs from their own company.
+- Member sees only their own URLs.
+- Public short URL redirects to the original URL.
+- SuperAdmin sees URLs from all companies.
+
+## Project Structure
+
+```text
+app/
+  Http/
+    Controllers/
+      InvitationController.php
+      ShortUrlController.php
+    Middleware/
+      RoleMiddleware.php
+  Models/
+    Company.php
+    Invitation.php
+    ShortUrl.php
+    User.php
+
+database/
+  migrations/
+  seeders/
+
+resources/
+  views/
+    dashboard.blade.php
+    invitations/
+
+routes/
+  web.php
+
+tests/
+  Feature/
+    ShortUrlTest.php
+```
+
+## Security Considerations
+
+- Routes are protected using authentication and role-based middleware.
+- Short URL listings are scoped according to user role and company.
+- Invitation tokens are stored as hashes and invitations expire.
+- Passwords are hashed before storage.
+- Keep `.env` and all production credentials out of version control.
+
+## AI Assistance Disclosure
+
+AI tools were used to assist with development, debugging, test preparation, and documentation. The implementation was reviewed and tested during development. The project author should be able to explain the code, design decisions, permissions, database relationships, and test cases.
 
 ## License
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+This project was developed as a technical assignment. No separate project license has been specified.

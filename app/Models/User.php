@@ -5,6 +5,8 @@ namespace App\Models;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
@@ -12,6 +14,10 @@ class User extends Authenticatable
 {
     /** @use HasFactory<UserFactory> */
     use HasFactory, Notifiable;
+
+    public const ROLE_SUPERADMIN = 'superadmin';
+    public const ROLE_ADMIN = 'admin';
+    public const ROLE_MEMBER = 'member';
 
     /**
      * The attributes that are mass assignable.
@@ -22,6 +28,8 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'company_id',
+        'role',
     ];
 
     /**
@@ -45,5 +53,20 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    public function company(): BelongsTo
+    {
+        return $this->belongsTo(Company::class);
+    }
+
+    public function shortUrls(): HasMany
+    {
+        return $this->hasMany(ShortUrl::class);
+    }
+
+    public function sentInvitations(): HasMany
+    {
+        return $this->hasMany(Invitation::class,'invited_by');
     }
 }
