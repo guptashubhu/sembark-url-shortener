@@ -190,10 +190,6 @@ tests/
 - Passwords are hashed before storage.
 - Keep `.env` and all production credentials out of version control.
 
-## AI Assistance Disclosure
-
-AI tools were used to assist with development, debugging, test preparation, and documentation. The implementation was reviewed and tested during development. The project author should be able to explain the code, design decisions, permissions, database relationships, and test cases.
-
 ## License
 
 This project was developed as a technical assignment. No separate project license has been specified.
